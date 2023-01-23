@@ -1,13 +1,13 @@
-import React from 'react';
-import {fetchData, endPoints} from '../helpers/apiHandler';
-import Header from './Header';
-import {MemoizedBusStopList} from './MemoizedBusStopList';
-import Loader from './Loader';
-import {Journey, JourneyList, SiteList, StopPointList} from '../helpers/types';
+import React from "react";
+import {fetchData, endPoints} from "../helpers/apiHandler";
+import Header from "./Header";
+import {MemoizedBusStopList} from "./MemoizedBusStopList";
+import Loader from "./Loader";
+import {Journey, JourneyList, SiteList, StopPointList} from "../helpers/types";
 // mock data
 // import { JourneyPattern, StopPoint, Site } from '../mockData';
-import {sortedArrayByStopPointCounts, makeBusStopArray} from '../helpers/appHelper';
-import './App.css';
+import {sortedArrayByStopPointCounts, makeBusStopArray} from "../helpers/appHelper";
+import "./App.css";
 
 function App() {
 	const [navigateBusLineIndex, setNavigateBusLineIndex] = React.useState<number>(-1);
@@ -37,6 +37,7 @@ function App() {
 				stopPointList?.ResponseData?.Result,
 				siteList?.ResponseData?.Result
 			);
+
 			/*
 			setTimeout(() => {
 				buildObjectsArray(journeyList?.ResponseData?.Result, stopPointList?.ResponseData?.Result, siteList?.ResponseData?.Result);
@@ -70,7 +71,7 @@ function App() {
 	// Maybe a little bit overkill to use useMemo here... :)
 	const busArrMemo = React.useMemo(() => top10ListOfBusLines[navigateBusLineIndex], [navigateBusLineIndex]);
 	return (
-		<div className='App'>
+		<div className="App" data-testid="app-div">
 			{top10ListOfBusLines.length === 0 ? (
 				<Loader />
 			) : (

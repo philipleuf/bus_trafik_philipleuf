@@ -1,6 +1,6 @@
-import React from 'react';
-import './Header.css';
-import {Journey} from '../helpers/types';
+import React from "react";
+import "./Header.css";
+import {Journey} from "../helpers/types";
 
 type Props = {
 	busLine: Journey;
@@ -11,19 +11,19 @@ type Props = {
 const Header = ({busLine, navigateBusLines, navigateBusLineIndex}: Props) => {
 	const {line, direction, destination} = busLine;
 	return (
-		<div className='headerDiv'>
+		<div className="headerDiv">
 			<button
-				className='navButtons'
+				className="navButtons"
 				disabled={navigateBusLineIndex === 0}
 				onClick={() => navigateBusLines(navigateBusLineIndex - 1)}
 			>
 				Föregående
 			</button>
-			<span className='headerText'>
+			<span className="headerText">
 				Busslinje: {line}, riktning: {direction}, slutstation: {destination}
 			</span>
 			<button
-				className='navButtons'
+				className="navButtons"
 				disabled={navigateBusLineIndex === 9}
 				onClick={() => navigateBusLines(navigateBusLineIndex + 1)}
 			>

@@ -1,5 +1,5 @@
-import {uniq} from 'lodash';
-import {Journey, JourneyList, SiteList, StopPointList} from './types';
+import {uniq} from "lodash";
+import {Journey, JourneyList, SiteList, StopPointList} from "./types";
 
 // Sort array highest to lowest b - a, to get the most busstops lines from top 0...10
 const sortedArrayByStopPointCounts = (busLineArray: Journey[]) =>
