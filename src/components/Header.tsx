@@ -1,6 +1,6 @@
 import React from 'react';
 import './Header.css';
-import { Journey } from '../helpers/types';
+import {Journey} from '../helpers/types';
 
 type Props = {
 	busLine: Journey;
@@ -8,8 +8,8 @@ type Props = {
 	navigateBusLineIndex: number;
 };
 
-const Header = ({ busLine, navigateBusLines, navigateBusLineIndex }: Props) => {
-	const { line, direction, destination } = busLine;
+const Header = ({busLine, navigateBusLines, navigateBusLineIndex}: Props) => {
+	const {line, direction, destination} = busLine;
 	return (
 		<div className='headerDiv'>
 			<button

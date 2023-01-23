@@ -5,7 +5,7 @@ type Props = {
 	stop: string;
 };
 
-const BusStop = ({ stop }: Props) => (
+const BusStop = ({stop}: Props) => (
 	<div className='busStopDiv'>
 		<div className='busStopDot' />
 		<span key={stop} className='busStopText'>

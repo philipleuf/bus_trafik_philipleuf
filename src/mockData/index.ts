@@ -1,5 +1,5 @@
-import { JourneyPattern } from './JourneyPattern';
-import { Site } from './Site';
-import { StopPoint } from './StopPoint';
+import {JourneyPattern} from './JourneyPattern';
+import {Site} from './Site';
+import {StopPoint} from './StopPoint';
 
-export { JourneyPattern, Site, StopPoint };
+export {JourneyPattern, Site, StopPoint};

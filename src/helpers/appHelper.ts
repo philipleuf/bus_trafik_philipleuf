@@ -1,20 +1,13 @@
-import { uniq } from 'lodash';
-import { Journey, JourneyList, SiteList, StopPointList } from './types';
+import {uniq} from 'lodash';
+import {Journey, JourneyList, SiteList, StopPointList} from './types';
 
 // Sort array highest to lowest b - a, to get the most busstops lines from top 0...10
 const sortedArrayByStopPointCounts = (busLineArray: Journey[]) =>
-	busLineArray.sort(
-		(a: Journey, b: Journey) => b.stopPointList.length - a.stopPointList.length
-	);
+	busLineArray.sort((a: Journey, b: Journey) => b.stopPointList.length - a.stopPointList.length);
 
 // look for name that matches JourneyPoint ID in both StopPoint and Site API
-const findSitePointName = (
-	journeyPointId: string,
-	stopPointList: Array<StopPointList>,
-	siteList: Array<SiteList>
-) =>
-	stopPointList.find((o: StopPointList) => o.StopPointNumber === journeyPointId)
-		?.StopPointName ||
+const findSitePointName = (journeyPointId: string, stopPointList: Array<StopPointList>, siteList: Array<SiteList>) =>
+	stopPointList.find((o: StopPointList) => o.StopPointNumber === journeyPointId)?.StopPointName ||
 	siteList.find((o: SiteList) => o.StopAreaNumber === journeyPointId)?.SiteName;
 
 // uses function to scope the function (not needed here though)and arrow-functions () => for small / oneliners / helpers where they dont need to be scoped
@@ -23,14 +16,10 @@ function makeBusStopArray(
 	stopPointList: Array<StopPointList>,
 	siteList: Array<SiteList>
 ) {
-	const busLines: { [key: string]: Journey } = {};
+	const busLines: {[key: string]: Journey} = {};
 	for (const item of journeyList) {
 		const key = `Line_${item.LineNumber}_Direction_${item.DirectionCode}`;
-		const stopPointName = findSitePointName(
-			item.JourneyPatternPointNumber,
-			stopPointList,
-			siteList
-		);
+		const stopPointName = findSitePointName(item.JourneyPatternPointNumber, stopPointList, siteList);
 		/**
 		 * Do lookup on object since it's faster than using find/findIndex on array.
 		 * Checking for stopPointName since the data is not complete and some JourneyPoints doesnt have names
@@ -61,4 +50,4 @@ function makeBusStopArray(
 	return busLines;
 }
 
-export { sortedArrayByStopPointCounts, makeBusStopArray };
+export {sortedArrayByStopPointCounts, makeBusStopArray};
