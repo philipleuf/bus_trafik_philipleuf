@@ -1,0 +1,7 @@
+.busStopListDiv {
+    display: flex;
+    flex-direction: column;
+    width: 2px;
+    border-left: 2px solid black;
+    margin-top: 20px;
+}

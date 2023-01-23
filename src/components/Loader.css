@@ -1,0 +1,23 @@
+.loaderDiv {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    margin-top: 40vh;
+}
+
+.loaderInnerDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.loaderText {
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.loaderImage {
+    width: 100px;
+    height: 100px;
+}
