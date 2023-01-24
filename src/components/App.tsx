@@ -1,91 +1,60 @@
 import React from "react";
-import {fetchData, endPoints} from "../helpers/apiHandler";
+import Loader from "./Loader";
 import Header from "./Header";
 import {MemoizedBusStopList} from "./MemoizedBusStopList";
-import Loader from "./Loader";
-import {Journey, JourneyList, SiteList, StopPointList} from "../helpers/types";
-// mock data
-// import { JourneyPattern, StopPoint, Site } from '../mockData';
-import {sortedArrayByStopPointCounts, makeBusStopArray} from "../helpers/appHelper";
+import {Journey} from "../helpers/types";
+import {makeTopListFromApiResponse} from "../helpers/appHelper";
 import "./App.css";
 
 function App() {
-	const [navigateBusLineIndex, setNavigateBusLineIndex] = React.useState<number>(-1);
-	const [top10ListOfBusLines, setTop10ListOfBusLines] = React.useState<Journey[]>([]);
+  const [navigateBusLineIndex, setNavigateBusLineIndex] = React.useState<number>(0);
+  const [top10ListOfBusLines, setTop10ListOfBusLines] = React.useState<Journey[]>([]);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
-	/** mock data, to not stress the api
-		const journeyList = JourneyPattern;
-		const siteList = Site;
-		const stopPointList = StopPoint;
-	*/
+  React.useEffect(() => {
+    const fetchInitalData = async () => {
+      // Careful using api, only 5 calls per minute and 500 per hour.
+      // Otherwise the apikey gets blocked. Cached on second run for 25 hours.
+      const top10List = await makeTopListFromApiResponse();
+      setTop10ListOfBusLines(top10List);
+    };
 
-	React.useEffect(() => {
-		const fetcher = async () => {
-			/**
-			 * Careful using api, only 5 calls per minute and 500 per hour. Otherwise the apikey gets blocked
-			 * Bring back line const [jour... and buildObjectsArray.. for real data. Use setTimeout block for mock data
-			 * Using setTimeout to imitate the fetch of the three APIs
-			 */
+    fetchInitalData().catch((err) => {
+      console.error(err);
+      setErrorMessage("Något gick fel när datan skulle hämtas försök igen");
+    });
 
-			const [journeyList, stopPointList, siteList] = await Promise.all([
-				fetchData(endPoints.JourneyPattern),
-				fetchData(endPoints.StopPoint),
-				fetchData(endPoints.Site),
-			]);
-			buildObjectsArray(
-				journeyList?.ResponseData?.Result,
-				stopPointList?.ResponseData?.Result,
-				siteList?.ResponseData?.Result
-			);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-			/*
-			setTimeout(() => {
-				buildObjectsArray(journeyList?.ResponseData?.Result, stopPointList?.ResponseData?.Result, siteList?.ResponseData?.Result);
-			}, 3000);
-			*/
-		};
+  function navigateBusLines(step: number) {
+    if (step >= 0 && step <= 9) {
+      return setNavigateBusLineIndex(step);
+    }
+  }
 
-		fetcher().catch((err) => console.error(err));
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	function buildObjectsArray(
-		journeyList: Array<JourneyList>,
-		stopPointList: Array<StopPointList>,
-		siteList: Array<SiteList>
-	) {
-		const busLines = makeBusStopArray(journeyList, stopPointList, siteList);
-		const sortedList = sortedArrayByStopPointCounts(Object.values(busLines));
-		setTop10ListOfBusLines(sortedList.slice(0, 10));
-		// trigger first render for memoized toplist array after building array
-		setNavigateBusLineIndex(0);
-	}
-
-	function navigateBusLines(step: number) {
-		if (step >= 0 && step <= 9) {
-			return setNavigateBusLineIndex(step);
-		}
-	}
-
-	// Maybe a little bit overkill to use useMemo here... :)
-	const busArrMemo = React.useMemo(() => top10ListOfBusLines[navigateBusLineIndex], [navigateBusLineIndex]);
-	return (
-		<div className="App" data-testid="app-div">
-			{top10ListOfBusLines.length === 0 ? (
-				<Loader />
-			) : (
-				<>
-					<Header
-						busLine={busArrMemo}
-						navigateBusLines={(step: number) => navigateBusLines(step)}
-						navigateBusLineIndex={navigateBusLineIndex}
-					/>
-					<MemoizedBusStopList busArr={busArrMemo} />
-				</>
-			)}
-		</div>
-	);
+  // Maybe a little bit overkill to use useMemo here... :)
+  const busArrMemo = React.useMemo(
+    () => top10ListOfBusLines[navigateBusLineIndex],
+    [top10ListOfBusLines, navigateBusLineIndex]
+  );
+  return (
+    <div className="App" data-testid="app-div">
+      <span className="errorMessageText">{errorMessage}</span>
+      {top10ListOfBusLines.length === 0 ? (
+        <Loader />
+      ) : (
+        <>
+          <Header
+            busLine={busArrMemo}
+            navigateBusLines={(step: number) => navigateBusLines(step)}
+            navigateBusLineIndex={navigateBusLineIndex}
+          />
+          <MemoizedBusStopList busArr={busArrMemo} />
+        </>
+      )}
+    </div>
+  );
 }
 
 export default App;

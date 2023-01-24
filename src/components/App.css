@@ -1,4 +1,4 @@
-body {
+.body {
 	background: #fff;
 }
 
@@ -6,4 +6,9 @@ body {
 	display: flex;
 	flex-direction: column;
 	margin: 20px;
+}
+
+.errorMessageText {
+	color: red;
+	font-size: 18px;
 }
